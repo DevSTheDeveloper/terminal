@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HTML Terminal</title>
+    <style>
+      body {
+        background-color: black;
+        color: white;
+        font-family: monospace;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+
+      .terminal {
+        flex: 1;
+        overflow-y: auto;
+        padding: 10px;
+        white-space: pre-wrap;
+      }
+
+      .input-container {
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+      }
+
+      .input-container:before {
+        content: '$';
+        font-size: 20px;
+        padding-right: 5px;
+      }
+
+      .input {
+        background-color: transparent;
+        color: white;
+        border: none;
+        flex: 1;
+        font-family: monospace;
+        font-size: inherit;
+        outline: none;
+        caret-color: white;
+      }
+
+      ::selection {
+        background-color: #0000ff;
+      }
+
+      .twitter {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        color: white;
+        font-size: 15px;
+      }
+
+      .twitter a {
+        color: white;
+        text-decoration: none;
+      }
+
+      .twitter img {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="terminal" id="terminal">
+      <div>Type "help" for a list of available commands.</div>
+    </div>
+    <div class="input-container">
+      <span>&nbsp;</span>
+      <input class="input" type="text" id="input" autocomplete="off" />
+    </div>
+    <div class="twitter">
+      <a href="https://twitter.com/dev_sehgal1" target="_blank">
+        <img src="https://abs.twimg.com/icons/apple-touch-icon-192x192.png" alt="Twitter logo" />
+        @dev_sehgal1
+      </a>
+    </div>
+
+    <script>
+      const terminal = document.getElementById('terminal');
+      const input = document.getElementById('input');
+
+      function printOutput(output) {
+        terminal.innerHTML += output + '<br />';
+        terminal.scrollTop = terminal.scrollHeight;
+      }
+
+function processInput() {
+  let inputValue = input.value.trim();
+  if (inputValue === '') {
+    return;
+  }
+  let inputArr = inputValue.split(' ');
+  let command = inputArr[0];
+  let args = inputArr.slice(1);
+  input.value = '';
+
+  if (command === 'clear') {
+    terminal.innerHTML = '';
+    return;
+  } else if (command === 'help') {
+    printOutput('List of available commands:');
+    printOutput('clear');
+    printOutput('time');
+    printOutput('echo <message>');
+    printOutput('date');
+    printOutput('calc <expression>');
+    printOutput('rand <min> <max>');
+    printOutput('color <color-name>');
+    printOutput('search <query>');
+    return;
+  } else if (command === 'time') {
+    let now = new Date();
+    let time = now.toLocaleTimeString();
+    printOutput(time);
+    return;
+  } else if (command === 'echo') {
+    let message = args.join(' ');
+    printOutput(message);
+    return;
+  } else if (command === 'date') {
+    let now = new Date();
+    let date = now.toLocaleDateString();
+    printOutput(date);
+    return;
+  } else if (command === 'calc') {
+    let expression = args.join('');
+    try {
+      let result = eval(expression);
+      printOutput(result);
+    } catch (error) {
+      printOutput('Invalid expression');
+    }
+    return;
+  } else if (command === 'rand') {
+    let min = parseInt(args[0]);
+    let max = parseInt(args[1]);
+    if (isNaN(min) || isNaN(max)) {
+      printOutput('Invalid arguments');
+    } else {
+      let result = Math.floor(Math.random() * (max - min + 1)) + min;
+      printOutput(result);
+    }
+    return;
+  } else if (command === 'color') {
+    let colorName = args[0];
+    let body = document.querySelector('body');
+    switch (colorName) {
+      case 'black':
+        body.style.backgroundColor = 'black';
+        body.style.color = 'white';
+        break;
+      case 'white':
+        body.style.backgroundColor = 'white';
+        body.style.color = 'black';
+        break;
+      case 'red':
+        body.style.backgroundColor = 'red';
+        body.style.color = 'white';
+        break;
+      case 'green':
+        body.style.backgroundColor = 'green';
+        body.style.color = 'white';
+        break;
+      case 'blue':
+        body.style.backgroundColor = 'blue';
+        body.style.color = 'white';
+        break;
+      default:
+        printOutput('Invalid color');
+    }
+    return;
+  } else if (command === 'search') {
+    let query = args.join('+');
+    let url = `https://www.google.com/search?q=${query}`;
+    window.open(url, '_blank');
+    return;
+  }
+
+  printOutput(`${command}: command not found`);
+}
+
+
+  input.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      processInput();
+    }
+  });
+
+  input.focus();
+</script>
+  </body>
+</html>
+
+
+
