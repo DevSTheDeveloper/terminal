@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HTML Terminal</title>
+    <style>
+      body {
+        background-color: black;
+        color: white;
+        font-family: monospace;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+
+      .terminal {
+        flex: 1;
+        overflow-y: auto;
+        padding: 10px;
+        white-space: pre-wrap;
+      }
+
+      .input-container {
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+      }
+
+      .input-container:before {
+        content: '$';
+        font-size: 20px;
+        padding-right: 5px;
+      }
+
+      .input {
+        background-color: transparent;
+        color: white;
+        border: none;
+        flex: 1;
+        font-family: monospace;
+        font-size: inherit;
+        outline: none;
+        caret-color: white;
+      }
+
+      ::selection {
+        background-color: #0000ff;
+      }
+
+      .twitter {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        color: white;
+        font-size: 20px;
+      }
+      
+      .twitter a {
+        color: white;
+        text-decoration: none;
+      }
+      
+      .twitter img {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="terminal" id="terminal">
+      <div>Welcome to HTML Terminal. Type "help" for a list of available commands.</div>
+    </div>
+    <div class="input-container">
+      <span>&nbsp;</span>
+      <input class="input" type="text" id="input" autocomplete="off" />
+    </div>
+    <div class="twitter">
+      <a href="https://twitter.com/dev_sehgal1" target="_blank">
+        <img src="https://abs.twimg.com/icons/apple-touch-icon-192x192.png" alt="Twitter logo" />
+        @dev_sehgal1
+      </a>
+    </div>
+
+    <script>
+      const terminal = document.getElementById('terminal');
+      const input = document.getElementById('input');
+      
+      function printOutput(output) {
+        terminal.innerHTML += output + '<br />';
+        terminal.scrollTop = terminal.scrollHeight;
+      }
+      
+      function processInput() {
+        let inputValue = input.value.trim();
+        if (inputValue === '') {
+          return;
+        }
+        let inputArr = inputValue.split(' ');
+        let command = inputArr[0];
+        let args = inputArr.slice(1);
+        input.value = '';
+
+        if (command === 'clear') {
+          terminal.innerHTML = '';
+          return;
+        } else if (command === 'help') {
+          printOutput('List of available commands:');
+          printOutput('clear');
+          printOutput('time');
+          return;
+        } else if (command === 'time') {
+          let now = new Date();
+          let time = now.toLocaleTimeString();
+          printOutput(time);
+          return;
+        }
+
+        printOutput(`${command}: command not found`);
+      }
+
+      input.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          processInput();
+        }
+      });
+
+      input.focus();
+    </script>
+  </body>
+</html>
