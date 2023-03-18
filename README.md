@@ -25,3 +25,6 @@ This project is licensed under the Apache 2.0 License. See the LICENSE file for 
 
 
 This CLI terminal was created by Dev Sehgal.
+
+
+COMING SOON: SSH CONNECTIONS, AUTOMATIC CLOUD SAVING FOR PRESET COMMANDS, TERMINAL LOGIN/ACCOUNT CREATION VIA CLI
